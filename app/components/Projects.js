@@ -71,7 +71,7 @@ export default function Projects() {
 
         {repos.length > 0 ? (
           <>
-            <h3 style={{fontSize: '2rem', marginBottom: '2rem', color: 'var(--light)', textAlign: 'center', marginTop: '3rem'}}>
+            <h3 style={{fontSize: '2rem', marginBottom: '2rem', color: 'var(--light)', textAlign: 'center'}}>
               Popular Repositories
             </h3>
             <div className="grid">
