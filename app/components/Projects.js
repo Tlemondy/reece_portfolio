@@ -33,6 +33,7 @@ export default function Projects() {
       }
     }
     
+    
     fetchGitHub()
   }, [])
 
