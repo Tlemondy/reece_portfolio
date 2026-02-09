@@ -22,7 +22,7 @@ export default function Projects() {
         
         if (Array.isArray(reposData)) {
           const filtered = reposData.filter(repo => !repo.fork)
-          const excludeRepos = ['html-portfolio']
+          const excludeRepos = ['html-portfolio', 'reece_portfolio']
           const displayRepos = filtered.filter(repo => !excludeRepos.includes(repo.name)).slice(0, 4)
           setRepos(displayRepos)
           setStats({ repos: userData.public_repos || filtered.length, commits: '500+' })
@@ -33,7 +33,7 @@ export default function Projects() {
       }
     }
     
-    
+
     fetchGitHub()
   }, [])
 
