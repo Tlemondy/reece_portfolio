@@ -1,9 +1,10 @@
 'use client'
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 
 export default function Projects() {
   const [repos, setRepos] = useState([])
-  const [stats, setStats] = useState({ repos: '10+', commits: '500+' })
+  const [stats, setStats] = useState({ repos: '10+', commits: '0' })
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -25,6 +26,7 @@ export default function Projects() {
           const excludeRepos = ['html-portfolio', 'reece_portfolio']
           const displayRepos = filtered.filter(repo => !excludeRepos.includes(repo.name)).slice(0, 4)
           setRepos(displayRepos)
+          
           setStats({ repos: userData.public_repos || filtered.length, commits: '500+' })
         }
         setLoading(false)
@@ -69,44 +71,20 @@ export default function Projects() {
           </div>
         </div>
 
-        {repos.length > 0 ? (
-          <>
-            <h3 style={{fontSize: '2rem', marginBottom: '2rem', color: 'var(--light)', textAlign: 'center'}}>
-              Popular Repositories
-            </h3>
-            <div className="grid">
-              {repos.map((repo, i) => (
-                <a 
-                  key={i} 
-                  href={repo.html_url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="card repo-card"
-                  style={{textDecoration: 'none', color: 'inherit'}}
-                >
-                  <div className="repo-header">
-                    <h3>{repo.name}</h3>
-                    {repo.language && <span className="language-badge">{repo.language}</span>}
-                  </div>
-                  <p>{repo.description || 'No description available'}</p>
-                  <div className="repo-footer">
-                    <span>{repo.stargazers_count} stars</span>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </>
-        ) : (
-          <p style={{fontSize: '1.2rem', color: 'var(--gray)', textAlign: 'center', marginTop: '3rem'}}>
-            Check out my latest projects and contributions on GitHub
-          </p>
-        )}
-
-        <div style={{textAlign: 'center', marginTop: '3rem'}}>
-          <a href="https://github.com/Tlemondy" target="_blank" rel="noopener noreferrer" className="btn btn-primary">
-            View All Projects →
-          </a>
+        <h3 style={{fontSize: '2rem', marginBottom: '2rem', color: 'var(--light)', textAlign: 'center'}}>
+          Flutter Projects
+        </h3>
+        <div className="grid" style={{marginBottom: '3rem'}}>
+          <Link href="/focus_one" className="card" style={{textDecoration: 'none', color: 'inherit'}}>
+            <h3>Focus One</h3>
+            <p>Productivity timer for focused work sessions</p>
+          </Link>
+          <Link href="/bottled" className="card" style={{textDecoration: 'none', color: 'inherit'}}>
+            <h3>Bottled</h3>
+            <p>Flutter web project showcase</p>
+          </Link>
         </div>
+
       </div>
     </section>
   )

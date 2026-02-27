@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="./">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="bottled">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>bottled</title>
+  <link rel="manifest" href="manifest.json">
+
+  <script>
+    // Detect if running on Edge browser
+    function isEdgeBrowser() {
+      return navigator.userAgent.indexOf('Edg') > -1;
+    }
+
+    // Request permission to display browser notifications
+    async function requestNotificationPermission() {
+      if (!('Notification' in window)) {
+        console.log('This browser does not support notifications');
+        return 'denied';
+      }
+      
+      if (Notification.permission === 'granted') {
+        return 'granted';
+      }
+      
+      if (Notification.permission === 'denied') {
+        return 'denied';
+      }
+      
+      try {
+        let permission;
+        if (isEdgeBrowser() || typeof Notification.requestPermission !== 'function') {
+          // Edge-specific handling or fallback
+          permission = await new Promise((resolve) => {
+            const result = Notification.requestPermission((perm) => {
+              resolve(perm);
+            });
+            // Handle both callback and promise styles
+            if (result && typeof result.then === 'function') {
+              result.then(resolve);
+            }
+          });
+        } else {
+          permission = await Notification.requestPermission();
+        }
+        console.log('Permission result:', permission);
+        return permission;
+      } catch (error) {
+        console.log('Notification request failed:', error);
+        return 'denied';
+      }
+    }
+    
+    // Register service worker for background notifications
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(function(registration) {
+          console.log('Service Worker registered:', registration);
+        })
+        .catch(function(error) {
+          console.log('Service Worker registration failed:', error);
+        });
+    }
+    
+    // Track page visibility for background notifications
+    let isPageVisible = !document.hidden;
+    
+    document.addEventListener('visibilitychange', function() {
+      isPageVisible = !document.hidden;
+      console.log('Page visibility changed:', isPageVisible ? 'visible' : 'hidden');
+    });
+    
+    // Enhanced notification function that works in background
+    function showBackgroundNotification(title, options) {
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        // Use service worker for background notifications
+        navigator.serviceWorker.ready.then(function(registration) {
+          registration.showNotification(title, {
+            ...options,
+            requireInteraction: true,
+            silent: false,
+            badge: '/favicon.png'
+          });
+        });
+      } else {
+        // Fallback to regular notification
+        showWebNotification(title, options);
+      }
+    }
+    
+    // Override showWebNotification to use background method when minimized
+    const originalShowWebNotification = showWebNotification;
+    showWebNotification = function(title, options) {
+      if (!isPageVisible && 'serviceWorker' in navigator) {
+        showBackgroundNotification(title, options);
+      } else {
+        originalShowWebNotification(title, options);
+      }
+    };
+    
+    // Auto-request permission on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      if ('Notification' in window && Notification.permission === 'default') {
+        console.log('Notifications available, waiting for user interaction');
+      }
+    });
+
+    // Show a browser notification if permission is granted
+    function showWebNotification(title, options) {
+      console.log('showWebNotification called with title:', title);
+      console.log('showWebNotification called with options:', JSON.stringify(options));
+      
+      if (!('Notification' in window)) {
+        console.log('This browser does not support notifications');
+        return;
+      }
+      
+      // Auto-request permission if not granted
+      if (Notification.permission === 'default') {
+        requestNotificationPermission().then(() => {
+          showWebNotification(title, options);
+        });
+        return;
+      }
+      
+      console.log('Notification permission:', Notification.permission);
+      
+      if (Notification.permission === 'granted') {
+        try {
+          // Enhanced options for better visibility
+          const enhancedOptions = {
+            ...options,
+            requireInteraction: true,
+            silent: false,
+            vibrate: [200, 100, 200],
+            timestamp: Date.now(),
+            renotify: true,
+            tag: options.tag || 'bottled-' + Date.now()
+          };
+          
+          const notification = new Notification(title, enhancedOptions);
+          console.log('Notification created successfully:', notification);
+          
+          // Auto-close after 10 seconds
+          setTimeout(() => {
+            if (notification && notification.close) {
+              notification.close();
+            }
+          }, 10000);
+          
+          // Handle click events
+          notification.onclick = function() {
+            window.focus();
+            notification.close();
+          };
+          
+        } catch (error) {
+          console.log('Failed to show notification:', error);
+        }
+      } else {
+        console.log('Notification permission not granted. Current permission:', Notification.permission);
+      }
+    }
+  </script>
+</head>
+<body>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
