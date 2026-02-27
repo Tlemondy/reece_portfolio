@@ -42,10 +42,10 @@ export default function Header() {
           </h3>
           <div className="desktop-nav">
             <a href="#home" onClick={() => handleClick('home')} onMouseEnter={() => handleHover('home')}>Home</a>
-            <a href="#about" onClick={() => handleClick('about')} onMouseEnter={() => handleHover('about')}>About</a>
             <a href="#services" onClick={() => handleClick('services')} onMouseEnter={() => handleHover('services')}>Services</a>
             <a href="#projects" onClick={() => handleClick('projects')} onMouseEnter={() => handleHover('projects')}>Projects</a>
             <a href="#contact" onClick={() => handleClick('contact')} onMouseEnter={() => handleHover('contact')}>Contact</a>
+            <a href="#about" onClick={() => handleClick('about')} onMouseEnter={() => handleHover('about')}>About</a>
           </div>
           <button 
             onClick={toggleTheme} 
@@ -56,10 +56,10 @@ export default function Header() {
       </nav>
       <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
         <a href="#home" onClick={() => handleClick('home')}>Home</a>
-        <a href="#about" onClick={() => handleClick('about')}>About</a>
         <a href="#services" onClick={() => handleClick('services')}>Services</a>
         <a href="#projects" onClick={() => handleClick('projects')}>Projects</a>
         <a href="#contact" onClick={() => handleClick('contact')}>Contact</a>
+        <a href="#about" onClick={() => handleClick('about')}>About</a>
       </div>
       {menuOpen && <div className="menu-overlay" onClick={() => setMenuOpen(false)} />}
     </>
