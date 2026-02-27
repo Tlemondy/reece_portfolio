@@ -79,10 +79,10 @@ export default function Projects() {
             <h3>Focus One</h3>
             <p>Productivity timer for focused work sessions</p>
           </Link>
-          <Link href="/bottled" className="card" style={{textDecoration: 'none', color: 'inherit'}}>
+          <a href="https://bottled-sooty.vercel.app" target="_blank" rel="noopener noreferrer" className="card" style={{textDecoration: 'none', color: 'inherit'}}>
             <h3>Bottled</h3>
             <p>Flutter web project showcase</p>
-          </Link>
+          </a>
         </div>
 
       </div>
