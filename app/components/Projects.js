@@ -75,10 +75,10 @@ export default function Projects() {
           Flutter Projects
         </h3>
         <div className="grid" style={{marginBottom: '3rem'}}>
-          <Link href="/focus_one" className="card" style={{textDecoration: 'none', color: 'inherit'}}>
+          <a href="/focus_one" target="_blank" rel="noopener noreferrer" className="card" style={{textDecoration: 'none', color: 'inherit'}}>
             <h3>Focus One</h3>
             <p>Productivity timer for focused work sessions</p>
-          </Link>
+          </a>
           <a href="https://bottled-sooty.vercel.app" target="_blank" rel="noopener noreferrer" className="card" style={{textDecoration: 'none', color: 'inherit'}}>
             <h3>Bottled</h3>
             <p>Flutter web project showcase</p>
