@@ -2,6 +2,3 @@ node_modules
 .next
 out
 .env*.local
-
-# Flutter web builds (contain API keys)
-public/focus_one/
